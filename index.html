@@ -1,0 +1,128 @@
+<!DOCTYPE html><html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Planner Oracular da Flá</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Georgia', serif;
+      background: linear-gradient(to bottom, #f5f0ff, #e4e2f7);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }h1 {
+  margin-bottom: 20px;
+  font-size: 2rem;
+  color: #5a3d8d;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 20px;
+  width: 90%;
+  max-width: 700px;
+}
+
+.card {
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  cursor: pointer;
+  text-align: center;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.card.flipped {
+  transform: rotateY(180deg);
+}
+
+.hidden-content {
+  display: none;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.random-button {
+  margin: 20px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  border: none;
+  background-color: #7c5ba0;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.random-button:hover {
+  background-color: #5a3d8d;
+}
+
+  </style>
+</head>
+<body>
+  <h1>Planner Oracular da Flá 🌙</h1>
+  <button class="random-button" onclick="revealRandomCard()">Sortear Carta do Dia 🔮</button>
+  <div class="cards">
+    <div class="card" onclick="toggleCard(this)">
+      <strong>Segunda-feira</strong>
+      <div class="hidden-content">Dia das Sementes 🌱<br>Tarefa: escrever algo novo no blog.<br>Mensagem: "Comece pequeno. Mas comece com alma."</div>
+    </div>
+    <div class="card" onclick="toggleCard(this)">
+      <strong>Terça-feira</strong>
+      <div class="hidden-content">Dia da Vitrine 🎨<br>Tarefa: cuidar do portfólio visual.<br>Mensagem: "Teu olhar também é pincel."</div>
+    </div>
+    <div class="card" onclick="toggleCard(this)">
+      <strong>Quarta-feira</strong>
+      <div class="hidden-content">Dia da Palavra Sussurrada 💬<br>Tarefa: alimentar o diário de vocabulário e o site de frases.<br>Mensagem: "Palavra dita com verdade vira canto."</div>
+    </div>
+    <div class="card" onclick="toggleCard(this)">
+      <strong>Quinta-feira</strong>
+      <div class="hidden-content">Dia do Código-Poema 🤖<br>Tarefa: brincar com Python ou imaginar novos projetos.<br>Mensagem: "Até as máquinas te escutam quando falas com beleza."</div>
+    </div>
+    <div class="card" onclick="toggleCard(this)">
+      <strong>Sexta-feira</strong>
+      <div class="hidden-content">Dia do Oráculo 🔮<br>Tarefa: atualizar o site do oráculo com novas frases.<br>Mensagem: "A resposta já vive em você."</div>
+    </div>
+    <div class="card" onclick="toggleCard(this)">
+      <strong>Sábado</strong>
+      <div class="hidden-content">Dia Livre 🌈<br>Tarefa: continuar um projeto esquecido ou descansar.<br>Mensagem: "Há sabedoria no ócio sagrado."</div>
+    </div>
+    <div class="card" onclick="toggleCard(this)">
+      <strong>Domingo</strong>
+      <div class="hidden-content">Dia do Ninho 🌻<br>Tarefa: fazer um balanço afetivo da semana.<br>Mensagem: "Teu esforço silencioso também é flor."</div>
+    </div>
+  </div><audio id="flip-sound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_eb94b3a3bb.mp3?filename=page-flip-3-143104.mp3"></audio>
+
+  <script>
+    function toggleCard(card) {
+      const content = card.querySelector('.hidden-content');
+      const sound = document.getElementById('flip-sound');
+      if (content.style.display === 'block') {
+        content.style.display = 'none';
+        card.classList.remove('flipped');
+      } else {
+        document.querySelectorAll('.hidden-content').forEach(c => c.style.display = 'none');
+        document.querySelectorAll('.card').forEach(c => c.classList.remove('flipped'));
+        content.style.display = 'block';
+        card.classList.add('flipped');
+        sound.currentTime = 0;
+        sound.play();
+      }
+    }
+
+    function revealRandomCard() {
+      const cards = document.querySelectorAll('.card');
+      const index = Math.floor(Math.random() * cards.length);
+      toggleCard(cards[index]);
+    }
+  </script></body>
+</html>
