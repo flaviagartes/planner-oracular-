@@ -6,144 +6,391 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Planner Oracular da Flá</title>
   <style>
-    body {
-      margin: 0; padding: 0;
-      font-family: 'Georgia', serif;
-      background: linear-gradient(to bottom, #f5f0ff, #e4e2f7);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      min-height: 100vh;
+    body { 
+      margin: 0; 
+      padding: 0; 
+      font-family: 'Georgia', serif; 
+      background: linear-gradient(to bottom, #f5f0ff, #e4e2f7); 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      justify-content: center; 
+      min-height: 100vh; 
+      padding: 20px;
+      box-sizing: border-box;
     }
-    h1 {
-      margin-bottom: 20px;
-      font-size: 2rem; color: #5a3d8d;
-    }
-    .random-button {
-      margin: 20px; padding: 10px 20px;
-      font-size: 1rem; border: none;
-      background-color: #7c5ba0; color: white;
-      border-radius: 8px; cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    .random-button:hover { background-color: #5a3d8d; }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-      gap: 20px;
-      width: 90%; max-width: 700px;
-    }
-
-    .card { perspective: 1000px; }
-
-    .card-inner {
-      position: relative;
-      width: 100%; padding: 20px;
-      background-color: #fff; border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      transform-style: preserve-3d;
-      transition: transform 0.6s;
-      min-height: 100px;
-    }
-
-    .card.flipped .card-inner { transform: rotateY(180deg); }
-
-    .card-front, .card-back {
-      position: absolute; top: 0; left: 0;
-      width: 100%; height: 100%;
-      backface-visibility: hidden;
-      display: flex; align-items: center;
-      justify-content: center; flex-direction: column;
+    
+    h1 { 
+      margin-bottom: 20px; 
+      font-size: 2rem; 
+      color: #5a3d8d; 
       text-align: center;
     }
-
-    .card-front strong { font-size: 1rem; color: #5a3d8d; }
-
-    .card-back {
-      transform: rotateY(180deg);
+    
+    .random-button { 
+      margin: 20px; 
+      padding: 12px 24px; 
+      font-size: 1rem; 
+      border: none; 
+      background-color: #7c5ba0; 
+      color: white; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      transition: all 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+    
+    .random-button:hover { 
+      background-color: #5a3d8d; 
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    
+    .random-button:active {
+      transform: translateY(0);
+    }
+    
+    .cards { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); 
+      gap: 20px; 
+      width: 100%; 
+      max-width: 800px; 
+    }
+    
+    .card { 
+      perspective: 1000px; 
+      cursor: pointer;
+      height: 150px;
+    }
+    
+    .card-inner { 
+      position: relative; 
+      width: 100%; 
+      height: 100%;
+      background-color: #fff; 
+      border-radius: 12px; 
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
+      transform-style: preserve-3d; 
+      transition: transform 0.6s ease;
+    }
+    
+    .card.flipped .card-inner { 
+      transform: rotateY(180deg); 
+    }
+    
+    .card-front, .card-back { 
+      position: absolute; 
+      top: 0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center; 
+      flex-direction: column; 
+      text-align: center; 
       padding: 20px;
-      font-size: 0.9rem;
-      color: #333;
+      box-sizing: border-box;
+      border-radius: 12px;
+      backface-visibility: hidden;
+    }
+    
+    .card-front { 
+      background: linear-gradient(135deg, #fff 0%, #f8f6ff 100%);
+      border: 2px solid #e4e2f7;
+    }
+    
+    .card-front strong { 
+      font-size: 1.1rem; 
+      color: #5a3d8d; 
+      font-weight: bold;
+    }
+    
+    .card-back { 
+      background: linear-gradient(135deg, #7c5ba0 0%, #5a3d8d 100%);
+      color: white;
+      transform: rotateY(180deg);
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+    
+    .card-back em { 
+      margin-top: 10px; 
+      color: #f5f0ff; 
+      font-style: italic;
+      font-size: 0.8rem;
     }
 
-    .card-back em {
-      margin-top: 10px;
-      color: #5a3d8d;
-      font-style: normal;
+    .sound-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #7c5ba0;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.2rem;
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      z-index: 1000;
+    }
+
+    .sound-toggle:hover {
+      background: #5a3d8d;
+    }
+
+    .sound-toggle.muted {
+      background: #999;
+    }
+
+    @media (max-width: 600px) {
+      .cards { 
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); 
+        gap: 15px; 
+      }
+      
+      .card {
+        height: 130px;
+      }
+      
+      h1 { 
+        font-size: 1.5rem; 
+      }
+      
+      .card-back {
+        font-size: 0.8rem;
+      }
     }
   </style>
 </head>
 <body>
+  <button id="sound-toggle" class="sound-toggle" title="Alternar som">🔊</button>
+  
   <h1>Planner Oracular da Flá 🌙</h1>
   <button id="sort-btn" class="random-button">Sortear Carta do Dia 🔮</button>
-
+  
   <div class="cards">
-    <!-- Cartas da semana -->
-    <div class="card"><div class="card-inner">
-      <div class="card-front"><strong>Segunda-feira</strong></div>
-      <div class="card-back">Dia das Sementes 🌱<br>Tarefa: escrever algo novo no blog.<br><em>“Comece pequeno. Mas comece com alma.”</em></div>
-    </div></div>
-
-    <div class="card"><div class="card-inner">
-      <div class="card-front"><strong>Terça-feira</strong></div>
-      <div class="card-back">Dia da Vitrine 🎨<br>Tarefa: cuidar do portfólio visual.<br><em>“Teu olhar também é pincel.”</em></div>
-    </div></div>
-
-    <div class="card"><div class="card-inner">
-      <div class="card-front"><strong>Quarta-feira</strong></div>
-      <div class="card-back">Dia da Palavra Sussurrada 💬<br>Tarefa: alimentar o diário de vocabulário e o site de frases.<br><em>“Palavra dita com verdade vira canto.”</em></div>
-    </div></div>
-
-    <div class="card"><div class="card-inner">
-      <div class="card-front"><strong>Quinta-feira</strong></div>
-      <div class="card-back">Dia do Código-Poema 🤖<br>Tarefa: brincar com Python ou imaginar novos projetos.<br><em>“Até as máquinas te escutam quando falas com beleza.”</em></div>
-    </div></div>
-
-    <div class="card"><div class="card-inner">
-      <div class="card-front"><strong>Sexta-feira</strong></div>
-      <div class="card-back">Dia do Oráculo 🔮<br>Tarefa: atualizar o site do oráculo com novas frases.<br><em>“A resposta já vive em você.”</em></div>
-    </div></div>
-
-    <div class="card"><div class="card-inner">
-      <div class="card-front"><strong>Sábado</strong></div>
-      <div class="card-back">Dia Livre 🌈<br>Tarefa: continuar um projeto esquecido ou descansar.<br><em>“Há sabedoria no ócio sagrado.”</em></div>
-    </div></div>
-
-    <div class="card"><div class="card-inner">
-      <div class="card-front"><strong>Domingo</strong></div>
-      <div class="card-back">Dia do Ninho 🌻<br>Tarefa: fazer um balanço afetivo da semana.<br><em>“Teu esforço silencioso também é flor.”</em></div>
-    </div></div>
+    <!-- Segunda -->
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-front"><strong>Segunda-feira</strong></div>
+        <div class="card-back">
+          <div>Dia das Sementes 🌱</div>
+          <div>Tarefa: escrever algo novo no blog.</div>
+          <em>"Comece pequeno. Mas comece com alma."</em>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Terça -->
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-front"><strong>Terça-feira</strong></div>
+        <div class="card-back">
+          <div>Dia da Vitrine 🎨</div>
+          <div>Tarefa: cuidar do portfólio visual.</div>
+          <em>"Teu olhar também é pincel."</em>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Quarta -->
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-front"><strong>Quarta-feira</strong></div>
+        <div class="card-back">
+          <div>Dia da Palavra Sussurrada 💬</div>
+          <div>Tarefa: alimentar o diário de vocabulário e o site de frases.</div>
+          <em>"Palavra dita com verdade vira canto."</em>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Quinta -->
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-front"><strong>Quinta-feira</strong></div>
+        <div class="card-back">
+          <div>Dia do Código-Poema 🤖</div>
+          <div>Tarefa: brincar com Python ou imaginar novos projetos.</div>
+          <em>"Até as máquinas te escutam quando falas com beleza."</em>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Sexta -->
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-front"><strong>Sexta-feira</strong></div>
+        <div class="card-back">
+          <div>Dia do Oráculo 🔮</div>
+          <div>Tarefa: atualizar o site do oráculo com novas frases.</div>
+          <em>"A resposta já vive em você."</em>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Sábado -->
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-front"><strong>Sábado</strong></div>
+        <div class="card-back">
+          <div>Dia Livre 🌈</div>
+          <div>Tarefa: continuar um projeto esquecido ou descansar.</div>
+          <em>"Há sabedoria no ócio sagrado."</em>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Domingo -->
+    <div class="card">
+      <div class="card-inner">
+        <div class="card-front"><strong>Domingo</strong></div>
+        <div class="card-back">
+          <div>Dia do Ninho 🌻</div>
+          <div>Tarefa: fazer um balanço afetivo da semana.</div>
+          <em>"Teu esforço silencioso também é flor."</em>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <audio id="flip-sound" preload="auto" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_eb94b3a3bb.mp3?filename=page-flip-3-143104.mp3"></audio>
-
   <script>
-    let sound;
-    document.addEventListener('DOMContentLoaded', () => {
-      sound = document.getElementById('flip-sound');
-      sound.load();
-      const cards = Array.from(document.querySelectorAll('.card'));
-      cards.forEach(card => {
-        card.addEventListener('click', () => toggleCard(card));
-        card.addEventListener('touchstart', e => { e.preventDefault(); toggleCard(card); });
-      });
-      const btn = document.getElementById('sort-btn');
-      btn.addEventListener('click', revealRandomCard);
-      btn.addEventListener('touchstart', e => { e.preventDefault(); revealRandomCard(); });
-    });
+    let soundEnabled = true;
+    let audioContext;
+    let soundInitialized = false;
+
+    // Função para criar som sintético (funciona melhor no mobile)
+    function createFlipSound() {
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
+      
+      gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.1);
+    }
+
+    function playFlipSound() {
+      if (!soundEnabled) return;
+      
+      try {
+        createFlipSound();
+      } catch (error) {
+        console.log('Som não disponível');
+      }
+    }
+
+    function initializeSound() {
+      if (soundInitialized) return;
+      
+      // Inicializa contexto de áudio no primeiro toque (necessário para mobile)
+      if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      
+      if (audioContext.state === 'suspended') {
+        audioContext.resume();
+      }
+      
+      soundInitialized = true;
+    }
 
     function toggleCard(card) {
-      document.querySelectorAll('.card').forEach(c => c.classList.remove('flipped'));
-      card.classList.add('flipped');
-      sound.currentTime = 0;
-      sound.play().catch(err => console.error('Erro ao tocar som:', err));
+      initializeSound();
+      
+      const isFlipped = card.classList.contains('flipped');
+      
+      if (isFlipped) {
+        card.classList.remove('flipped');
+      } else {
+        // Remove flip de todas as outras cartas
+        document.querySelectorAll('.card').forEach(c => {
+          c.classList.remove('flipped');
+        });
+        
+        // Adiciona flip na carta clicada
+        card.classList.add('flipped');
+      }
+      
+      playFlipSound();
     }
 
     function revealRandomCard() {
+      initializeSound();
+      
       const cards = Array.from(document.querySelectorAll('.card'));
-      const index = Math.floor(Math.random() * cards.length);
-      toggleCard(cards[index]);
+      const randomIndex = Math.floor(Math.random() * cards.length);
+      toggleCard(cards[randomIndex]);
     }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      const soundToggle = document.getElementById('sound-toggle');
+      soundToggle.textContent = soundEnabled ? '🔊' : '🔇';
+      soundToggle.classList.toggle('muted', !soundEnabled);
+      soundToggle.title = soundEnabled ? 'Desativar som' : 'Ativar som';
+    }
+
+    // Inicialização quando a página carregar
+    document.addEventListener('DOMContentLoaded', () => {
+      // Configura eventos das cartas
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        card.addEventListener('click', (e) => {
+          e.preventDefault();
+          toggleCard(card);
+        });
+        
+        // Melhor suporte para touch no mobile
+        card.addEventListener('touchend', (e) => {
+          e.preventDefault();
+          toggleCard(card);
+        });
+      });
+
+      // Configura botão de sortear
+      const sortBtn = document.getElementById('sort-btn');
+      sortBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        revealRandomCard();
+      });
+      
+      sortBtn.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        revealRandomCard();
+      });
+
+      // Configura botão de som
+      const soundToggle = document.getElementById('sound-toggle');
+      soundToggle.addEventListener('click', (e) => {
+        e.preventDefault();
+        toggleSound();
+      });
+      
+      soundToggle.addEventListener('touchend', (e) => {
+        e.preventDefault();
+        toggleSound();
+      });
+    });
   </script>
 </body>
 </html>
